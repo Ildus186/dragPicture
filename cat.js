@@ -1,11 +1,26 @@
 const section = document.createElement('section')
-document.body.append(section)
+const sliderBox = document.createElement('article')
+sliderBox.classList.add('sliderBox')
+const slider = document.createElement('input');
+slider.type = 'range';                    
+slider.min = '75';                
+slider.max = '400';               
+slider.value = '200';             
+slider.step = '1';                
+slider.classList.add('size-slider');
+const sliderValue = document.createElement('span');
+sliderValue.classList.add('slider-value');
+sliderValue.textContent = `Размер: ${slider.value}px`;
+sliderBox.append(slider, sliderValue)
+const sizeInfo = document.createElement('div')
+sizeInfo.classList.add('sizeInfo')
+document.body.append(section, sliderBox, sizeInfo)
 const button1 = document.createElement('button')
 button1.textContent = "Уменшить"
-button1.classList = 'button1'
+button1.classList.add('button1')
 const button2 = document.createElement('button')
 button2.textContent = "Увеличить"
-button2.classList = 'button2'
+button2.classList.add('button2')
 const div = document.createElement('div')
 const image = document.createElement('img')
 image.src = 'https://img.freepik.com/free-photo/cute-kitten-playing-fluffy-fur-staring-outdoors-comfortable-resting-generated-by-artificial-intelligence_188544-130664.jpg?semt=ais_hybrid'
@@ -14,26 +29,41 @@ sizeBtn.classList = 'sizeBtn'
 div.append(image, sizeBtn)
 section.append(button1, button2, div)
 
+    const aspectRatio = 1.5;
+
 button1.addEventListener('click', () => {
     const currentWidth = div.clientWidth;
-    const newWidth = currentWidth / 1.1; 
-    const currentHeight = div.clientHeight;
-    const newHeight = currentHeight / 1.1;       
-    div.style.width = newWidth + 'px';
-    div.style.height = newHeight + 'px';
-
-}
-)
+    const newWidth = Math.max(currentWidth / 1.1, 75);
+    slider.value = newWidth; 
+    updateSizeFromSlider(); 
+});
 
 button2.addEventListener('click', () => {
     const currentWidth = div.clientWidth;
-    const newWidth = currentWidth * 1.1; 
-    const currentHeight = div.clientHeight;
-    const newHeight = currentHeight * 1.1;        
+    const newWidth = Math.min(currentWidth * 1.1, 400);
+    slider.value = newWidth; 
+    updateSizeFromSlider(); 
+});
+
+
+function updateSizeFromSlider() {
+    const newWidth = parseInt(slider.value);
+    const newHeight = newWidth / aspectRatio; 
+    
     div.style.width = newWidth + 'px';
-    div.style.height = newHeight + 'px';
+    div.style.height = Math.round(newHeight) + 'px';
+    
+    sliderValue.textContent = `${newWidth}`;
+    
+    resizeObserver.unobserve(div);
+    resizeObserver.observe(div);
 }
-)
+
+slider.addEventListener('input', updateSizeFromSlider);
+
+slider.value = div.clientWidth;
+sliderValue.textContent = `${slider.value}`;
+
 
         let isDragging = false;
         let startX, startY, initialLeft, initialTop;
@@ -94,12 +124,10 @@ button2.addEventListener('click', () => {
     event.stopPropagation()
     isResizing = true;
     
-    startResizeX = event.clientX;
-    startResizeY = event.clientY;
     startWidth = div.clientWidth;
     startHeight = div.clientHeight;
-    
-    const aspectRatio = startWidth / startHeight;
+    startResizeX = event.clientX;
+    startResizeY = event.clientY;
     
     document.addEventListener('mousemove', handleResize);
     document.addEventListener('mouseup', stopResize);
@@ -131,7 +159,7 @@ function handleResize(e) {
     
     newWidth = Math.max(75, newWidth);
     newHeight = Math.max(50, newHeight);
-    
+
     div.style.width = Math.round(newWidth) + 'px';
     div.style.height = Math.round(newHeight) + 'px';
 }
@@ -143,4 +171,31 @@ function handleResize(e) {
 }
 });
 
- 
+
+const resizeObserver = new ResizeObserver((entries) => {
+    entries.forEach(entry => {
+        const { width, height } = entry.contentRect;
+        sizeInfo.textContent = `Ширина картинки: ${width}px Высота картинки ${height}px`
+
+        const roundedWidth = Math.round(width);
+        slider.value = roundedWidth; 
+        sliderValue.textContent = `${roundedWidth}`;
+
+            if(width <= 75){
+                sizeInfo.style.boxShadow = '0 5px 10px rgba(243, 9, 9, 0.2)'
+                button1.disabled = true
+                button2.disabled = false
+            } else if (width >= 400) {
+                sizeInfo.style.boxShadow = '0 5px 10px rgba(243, 9, 9, 0.2)'
+                button2.disabled = true 
+                button1.disabled = false 
+            } else {
+                sizeInfo.style.boxShadow = '0 2px 5px rgba(0,0,0,0.2)'
+                button1.disabled = false
+                button2.disabled = false
+            }
+    });
+});
+
+
+resizeObserver.observe(div);

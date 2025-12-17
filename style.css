@@ -29,6 +29,12 @@ button {
     background: #c0392b;
 }
 
+.button1:disabled,
+.button2:disabled{
+    opacity: 0.5;
+    cursor: not-allowed
+}
+
 .button2 {
     top: 350px;
     left: 210px;
@@ -45,12 +51,26 @@ img {
   object-fit: cover
 }
 
-div {
+section div {
     width: 150px;
     height: 100px;
     position: absolute;
     top: 150px;
     left: 125px;
+    border-radius: 4px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    transition: transform 0.1s;
+       user-select: none;
+    -webkit-user-select: none;  
+    -moz-user-select: none;  
+    -ms-user-select: none;  
+    cursor: grab; 
+}
+
+ body div {
+    width: 150px;
+    height: 100px;
+    margin:  auto;
     border-radius: 4px;
     box-shadow: 0 2px 5px rgba(0,0,0,0.2);
     transition: transform 0.1s;
@@ -78,4 +98,26 @@ div {
 .sizeBtn:hover {
     background-color: white;
     border: 0.5px solid black;
+}
+
+.sizeInfo{
+    font-size: 16px;
+    width: 180px;
+    height:50px;
+    text-align: center;
+}
+
+.size-slider{
+    display:block;
+}
+
+.slider-value{
+
+}
+
+.sliderBox{
+    display: flex;
+    gap: 5px;
+    margin-bottom: 20px;
+    justify-content: center
 }
