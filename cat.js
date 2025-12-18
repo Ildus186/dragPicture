@@ -31,14 +31,8 @@ section.append(button1, button2, div)
 
     const aspectRatio = 1.5;
 
- function preventZoomOnMobile(event) {
-    event.preventDefault();
-    event.stopPropagation();
-    return false;
-}   
 
 button1.addEventListener('click', () => {
-    preventZoomOnMobile(e);
     const currentWidth = div.clientWidth;
     const newWidth = Math.max(currentWidth / 1.1, 75);
     slider.value = newWidth; 
@@ -46,7 +40,6 @@ button1.addEventListener('click', () => {
 });
 
 button2.addEventListener('click', () => {
-    preventZoomOnMobile(e);
     const currentWidth = div.clientWidth;
     const newWidth = Math.min(currentWidth * 1.1, 400);
     slider.value = newWidth; 
