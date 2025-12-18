@@ -96,22 +96,10 @@ section div {
 
 @media (max-width: 767px) {
 .sizeBtn {
-    position: absolute;
-    background-color: transparent;
     width: 15px;
     height: 15px;
-    border: none;
-    bottom: -1px;
-    right: -1px;
-    padding: 0;
-    border-radius: 1px;
-    cursor:se-resize;
 }
 
-.sizeBtn:hover {
-    background-color: white;
-    border: 0.5px solid black;
-}
 }
 
 .sizeBtn:hover {
