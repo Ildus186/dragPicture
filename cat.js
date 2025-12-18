@@ -69,13 +69,17 @@ sliderValue.textContent = `${slider.value}`;
         let startX, startY, initialLeft, initialTop;
         
         div.addEventListener('mousedown', startDrag);
+        div.addEventListener('touchstart', startDrag);
         
         function startDrag(e) {
+            e.preventDefault();
             isDragging = true;
             
+            const clientX = e.clientX ?? e.touches[0].clientX;
+            const clientY = e.clientY ?? e.touches[0].clientY;
 
-            startX = e.clientX;
-            startY = e.clientY;
+            startX = clientX 
+            startY = clientY
             
             const style = window.getComputedStyle(div);
             initialLeft = parseInt(style.left) || 0;
@@ -83,16 +87,23 @@ sliderValue.textContent = `${slider.value}`;
             
             document.addEventListener('mousemove', drag);
             document.addEventListener('mouseup', stopDrag);
+
+            document.addEventListener('touchmove', drag);
+            document.addEventListener('touchend', stopDrag);
             
             e.preventDefault();
             
         }
         
         function drag(e) {
-            if (!isDragging) return;
+            if (!isDragging) return
+             e.preventDefault()
             
-            const dx = e.clientX - startX;
-            const dy = e.clientY - startY;
+            const clientX = e.clientX ?? e.touches[0].clientX;
+            const clientY = e.clientY ?? e.touches[0].clientY;
+
+            const dx = clientX - startX;
+            const dy = clientY - startY;
             
 
             const newLeft = initialLeft + dx;
@@ -112,6 +123,8 @@ sliderValue.textContent = `${slider.value}`;
             isDragging = false;
             document.removeEventListener('mousemove', drag);
             document.removeEventListener('mouseup', stopDrag);
+            document.removeEventListener('touchmove', drag);
+            document.removeEventListener('touchend', stopDrag);
         }
 
 
@@ -120,24 +133,34 @@ sliderValue.textContent = `${slider.value}`;
 
 
 
-    sizeBtn.addEventListener('mousedown', (event) => {
-    event.stopPropagation()
+sizeBtn.addEventListener('mousedown', startResizeHandler);
+sizeBtn.addEventListener('touchstart', startResizeHandler);
+
+function startResizeHandler(event) {
+    event.stopPropagation();
+    event.preventDefault(); 
     isResizing = true;
-    
+
+    const clientX = event.clientX ?? event.touches[0].clientX;
+    const clientY = event.clientY ?? event.touches[0].clientY;
+
     startWidth = div.clientWidth;
     startHeight = div.clientHeight;
-    startResizeX = event.clientX;
-    startResizeY = event.clientY;
-    
+    startResizeX = clientX; // 
+    startResizeY = clientY;
+
     document.addEventListener('mousemove', handleResize);
     document.addEventListener('mouseup', stopResize);
+
+    document.addEventListener('touchmove', handleResize, { passive: false }); 
+    document.addEventListener('touchend', stopResize);
+}
     
-    event.preventDefault();
-    
-function handleResize(e) {
+function handleResize(event) {
     if (!isResizing) return;
     
-    const dx = e.clientX - startResizeX;
+    const clientX = event.clientX ?? event.touches[0].clientX;
+    const dx = clientX - startResizeX;
 
     const currentLeft = parseInt(div.style.left) || 0;
     const currentTop = parseInt(div.style.top) || 0;
@@ -168,14 +191,16 @@ function handleResize(e) {
     isResizing = false;
     document.removeEventListener('mousemove', handleResize);
     document.removeEventListener('mouseup', stopResize);
+    document.removeEventListener('touchmove', handleResize); 
+    document.removeEventListener('touchend', stopResize);
 }
-});
+
 
 
 const resizeObserver = new ResizeObserver((entries) => {
     entries.forEach(entry => {
         const { width, height } = entry.contentRect;
-        sizeInfo.textContent = `Ширина картинки: ${width}px Высота картинки ${height}px`
+        sizeInfo.textContent = `Ширина картинки: ${width}px Высота картинки: ${height}px`
 
         const roundedWidth = Math.round(width);
         slider.value = roundedWidth; 
