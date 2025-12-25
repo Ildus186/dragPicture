@@ -23,7 +23,7 @@ button2.textContent = "Увеличить"
 button2.classList.add('button2')
 const div = document.createElement('div')
 const image = document.createElement('img')
-image.src = 'https://img.freepik.com/free-photo/cute-kitten-playing-fluffy-fur-staring-outdoors-comfortable-resting-generated-by-artificial-intelligence_188544-130664.jpg?semt=ais_hybrid'
+image.src = 'https://i.pinimg.com/736x/a6/d3/75/a6d375aa4956d967b939633edab60811.jpg'
 const sizeBtn = document.createElement('button')
 sizeBtn.classList = 'sizeBtn'
 div.append(image, sizeBtn)
