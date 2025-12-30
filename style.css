@@ -128,3 +128,13 @@ section div {
     margin-bottom: 20px;
     justify-content: center;
 }
+
+label {
+    margin-right:10px;
+}
+
+nav {
+    width: 220px;
+    height: 80px;
+    margin: 0 auto
+}

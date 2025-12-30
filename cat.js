@@ -1,3 +1,30 @@
+const CAT = "https://img.freepik.com/free-photo/cute-kitten-playing-fluffy-fur-staring-outdoors-comfortable-resting-generated-by-artificial-intelligence_188544-130664.jpg?semt=ais_hybrid&w=740"
+const DOG = "https://avatars.mds.yandex.net/i?id=34108a79fc0f23eb898ac5385b7bae18_l-5858868-images-thumbs&n=13"
+const RACCOON = "https://img.freepik.com/premium-photo/surprised-raccoon-with-open-mouth-darkly-comedic-photoillustration_899449-128347.jpg?semt=ais_hybrid&w=740"
+const DEFAULT = 'https://image.winudf.com/v2/image/Y29tLnN0ZXJsaW5ndmlkZW9nYW1lcy5yYWxseXJhY2VyX3NjcmVlbl8xXzE1MjI0MjQ0OTNfMDk4/screen-1.jpg?fakeurl=1&type=.jpg'
+const aspectRatio = 1.5;
+
+const radioSection = document.createElement('nav')
+const h2 = document.createElement('h2')
+h2.textContent = 'Выбери персонажа'
+radioSection.append(h2)
+
+function createRadioInput(textContent, src){
+const label = document.createElement('label')
+label.textContent = textContent
+const radio = document.createElement('input')
+radio.type = 'radio'
+radio.name = 'animal'
+radio.dataset.src = src
+label.append(radio)
+radioSection.append(label)
+}
+
+createRadioInput('Котик', CAT)
+createRadioInput('Пёсик', DOG)
+createRadioInput('Енот', RACCOON)
+
+
 const section = document.createElement('section')
 const sliderBox = document.createElement('article')
 sliderBox.classList.add('sliderBox')
@@ -14,7 +41,7 @@ sliderValue.textContent = `Размер: ${slider.value}px`;
 sliderBox.append(slider, sliderValue)
 const sizeInfo = document.createElement('div')
 sizeInfo.classList.add('sizeInfo')
-document.body.append(section, sliderBox, sizeInfo)
+document.body.append(radioSection, section, sliderBox, sizeInfo)
 const button1 = document.createElement('button')
 button1.textContent = "Уменшить"
 button1.classList.add('button1')
@@ -23,13 +50,17 @@ button2.textContent = "Увеличить"
 button2.classList.add('button2')
 const div = document.createElement('div')
 const image = document.createElement('img')
-image.src = 'https://i.pinimg.com/736x/a6/d3/75/a6d375aa4956d967b939633edab60811.jpg'
+image.src = DEFAULT
 const sizeBtn = document.createElement('button')
 sizeBtn.classList = 'sizeBtn'
 div.append(image, sizeBtn)
 section.append(button1, button2, div)
 
-    const aspectRatio = 1.5;
+radioSection.addEventListener('change', (event) => {
+    if (event.target.type === 'radio' && event.target.checked) {
+        image.src = event.target.dataset.src;
+    }
+});
 
 
 button1.addEventListener('click', () => {
